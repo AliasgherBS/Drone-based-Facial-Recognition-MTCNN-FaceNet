@@ -1,0 +1,54 @@
+To get a live stream from a DJI Mavic Air 2 drone to Python using OpenCV, you will need to use the DJI Mobile SDK to receive the video stream from the drone, and then use OpenCV to process and display the video frames. Here are the steps you can follow:
+
+Install the DJI Mobile SDK and the necessary dependencies, such as the DJI Windows SDK and the DJI Android SDK (if you are using an Android device).
+
+Follow the instructions in the DJI Mobile SDK documentation to set up your development environment and create a new project.
+
+In your project, use the DJI Mobile SDK to connect to the drone and start the video stream. The DJI Mobile SDK provides a class called DJICamera that allows you to control the camera on the drone and receive the video stream.
+
+Use OpenCV to decode the video frames from the drone. The DJI Mobile SDK provides the video stream in a format called H.264, which can be decoded using OpenCV's cv2.VideoCapture class.
+
+Use OpenCV's cv2.imshow function to display the decoded video frames.
+
+Here is some sample code that demonstrates how to connect to the drone, start the video stream, and display the video frames using OpenCV:
+
+
+import cv2
+import dji.sdk.sdkmanager.DJISDKManager
+
+def main():
+    # Connect to the drone
+    dji.sdk.sdkmanager.DJISDKManager.getInstance().startConnectionToProduct()
+
+    # Get the DJICamera object
+    camera = dji.sdk.sdkmanager.DJISDKManager.getInstance().getCamera()
+
+    # Start the video stream
+    camera.startLiveView()
+
+    # Create a VideoCapture object to decode the video frames
+    cap = cv2.VideoCapture("http://127.0.0.1:8554/")
+
+    while True:
+        # Read a frame from the video stream
+        _, frame = cap.read()
+
+        # Display the frame using OpenCV
+        cv2.imshow("Live Stream", frame)
+
+        # Check for user input
+        key = cv2.waitKey(1)
+        if key == 27:  # Esc key
+            break
+
+    # Stop the video stream and release the VideoCapture object
+    camera.stopLiveView()
+    cap.release()
+
+if __name__ == "__main__":
+    main()
+
+
+
+Keep in mind that this is just a rough example, and you may need to modify the code depending on your specific use case. For more information and detailed instructions, refer to the DJI Mobile SDK documentation and the OpenCV documentation.
+
